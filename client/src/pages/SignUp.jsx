@@ -22,37 +22,48 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center h-screen p-4 md:p-0">
-      <VegeInfo />
-      <div className="bg-[#FCCD2A] rounded-xl w-full sm:w-2/3 md:w-1/3">
-        <form className="">
-          <center>
-            <p className="bg-[#347928] rounded-t-xl text-white p-3 text-center font-bold text-2xl md:text-3xl shadow-lg shadow-black">
-              Sign Up
-            </p>
-            <div className="my-3 p-2">
-              <div className="my-4">
-                <label className={lableStyle}>Your Phone Number</label><br />
-                <input type="text" name="phone" value={form.phone} onChange={handleChange} className={inputBoxStyle} />
+    <div>
+      <div className='fixed top-0 left-0 bg-transparent p-2'>
+        <Link to="/">
+          <button className="bg-[#347928] p-2 text-white rounded-lg hover:scale-110 active:scale-95 transition-all duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" class="size-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+          </button>
+        </Link>
+      </div>
+      <div className="grid md:grid-cols-2 grid-cols-1 h-screen gap-5">
+        <VegeInfo />
+        <div className="bg-[#C0EBA6] flex justify-center items-center py-10 px-2">
+          <form className="bg-[#FCCD2A] rounded-xl sm:w-4/5 w-full">
+            <center>
+              <p className="bg-[#347928] rounded-t-xl text-white p-3 text-center font-bold text-2xl md:text-3xl shadow-lg shadow-black">
+                Sign Up
+              </p>
+              <div className="my-3 p-2">
+                <div className="my-4">
+                  <label className={lableStyle}>Your Phone Number</label><br />
+                  <input type="text" name="phone" value={form.phone} onChange={handleChange} className={inputBoxStyle} />
+                </div>
+                <div className="my-4">
+                  <label className={lableStyle}>Your Password</label><br />
+                  <input type="password" name="pwd" value={form.pwd} onChange={handleChange} className={inputBoxStyle} />
+                </div>
+                <div className="my-4">
+                  <label className={lableStyle}>Confirm Your Password</label><br />
+                  <input type="password" name="cpwd" value={form.cpwd} onChange={handleChange} className={inputBoxStyle} />
+                </div>
               </div>
-              <div className="my-4">
-                <label className={lableStyle}>Your Password</label><br />
-                <input type="password" name="pwd" value={form.pwd} onChange={handleChange} className={inputBoxStyle} />
+              <button className="rounded-lg bg-[#347928] hover:scale-110 active:scale-95 p-2 text-lg md:text-xl text-white transition-all duration-300 mb-2" onClick={handleSubmit}>
+                Sign Up
+              </button>
+              <div className='mb-4'>
+                  <p className="text-sm">Already have an account? Then</p>
+                  <Link to="/signin" className="text-black hover:underline text-lg font-bold">Sign In</Link>
               </div>
-              <div className="my-4">
-                <label className={lableStyle}>Confirm Your Password</label><br />
-                <input type="password" name="cpwd" value={form.cpwd} onChange={handleChange} className={inputBoxStyle} />
-              </div>
-            </div>
-            <button className="rounded-lg bg-[#347928] hover:scale-110 active:scale-95 p-2 text-lg md:text-xl text-white transition-all duration-300 mb-2" onClick={handleSubmit}>
-              Sign Up
-            </button>
-            <div className='mb-4'>
-                <p className="text-sm">Already have an account? Then</p>
-                <Link to="/signin" className="text-black hover:underline text-lg font-bold">Sign In</Link>
-            </div>
-          </center>
-        </form>
+            </center>
+          </form>
+        </div>
       </div>
     </div>
   );

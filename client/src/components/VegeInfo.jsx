@@ -2,12 +2,16 @@ import React from 'react'
 
 const VegeInfo = () => {
   return (
-    <div className="grid place-items-center w-full md:w-1/2">
-        <p className="nerko-one-regular text-9xl scale-125 text-[#347928] mt-5 md:mt-10 soft-shadow-text ">Veg-e</p>
-        <p className='nerko-one-regular text-5xl text-[#FCCD2A] font-extrabold mt-5 md:mt-10 text-center'>
+    <div className="flex flex-col items-center justify-center space-y-7">
+        <p className="nerko-one-regular scale-125 text-9xl text-[#347928] soft-shadow-text ">Veg-e</p>
+        <p className='nerko-one-regular text-5xl text-[#FCCD2A] font-extrabold text-center'>
             Your Freshness Hub for Farm-Fresh Goodness!
         </p>
-        <p className='nerko-one-regular text-4xl text-black font-bold mt-5 md:mt-10 text-center'>Go <p className='text-[#347928]'>Green</p> with Veg-e!</p>
+        <div>
+        <p className='nerko-one-regular text-4xl text-black font-bold text-center'>Go </p>
+        <p className='text-[#347928] nerko-one-regular text-4xl font-bold text-center'>Green</p> 
+        <p className='nerko-one-regular text-4xl text-black font-bold text-center'>with Veg-e!</p>
+        </div>
     </div>
   )
 }

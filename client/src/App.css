@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Matemasie&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nerko+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Itim&family=Nerko+One&display=swap');
 
 .matemasie-regular 
 {
@@ -21,11 +22,18 @@
     font-weight:bold;
     font-style:oblique;
 }  
+.itim-regular {
+    font-family: "Itim", cursive;
+    font-style: normal;
+  }
+  
 .soft-shadow-text 
 {
     text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
 }
-.glow-text {
+.glow-text 
+{
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 
                  0 0 20px rgba(255, 255, 255, 0.6);
-  }
+}
+  
