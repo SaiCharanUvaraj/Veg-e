@@ -8,7 +8,7 @@ const SignIn = () => {
     pwd: ""
   });
 
-  const inputBoxStyle = "rounded-lg mt-2 md:w-4/5 w-full focus:scale-105 text-lg h-10 transition-all duration-300";
+  const inputBoxStyle = "rounded-lg mt-2 w-5/6 focus:scale-105 text-lg h-10 transition-all duration-300";
   const lableStyle = "text-lg font-semibold";
 
   const handleChange = (e) => {

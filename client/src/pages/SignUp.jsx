@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import VegeInfo from '../components/VegeInfo';
+import axios from 'axios';
 
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -8,25 +9,64 @@ const SignUp = () => {
     pwd: "",
     cpwd: ""
   });
+  const [msg,setMsg]=useState("");
+  const [otp,setOtp]=useState("");
+  const [otpBox,setOtpBox]=useState(false);
 
-  const inputBoxStyle = "rounded-lg mt-2 w-full md:w-4/5 focus:scale-105 text-lg h-10 transition-all duration-300";
+  const inputBoxStyle = "rounded-lg mt-2 w-5/6 focus:scale-105 text-lg h-10 transition-all duration-300";
   const lableStyle = "text-lg font-semibold";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if(value=="")
+      setForm({ ...form, [name]: value });
+    if(name=="phone" && !(/^[0-9]+$/.test(value)))
+      return
     setForm({ ...form, [name]: value });
+  };
+
+  const handleOtpChange = (e) => {
+    const otp= e.target.value;
+    setOtp(otp);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
 
+  const handleOtpSubmit = async(e) => {
+    e.preventDefault();
+    try 
+    {
+      const response = await axios.post("http://localhost:3000/verify-otp", {otp});
+      setMsg(response.data); 
+    } 
+    catch (error) 
+    {
+      setMsg('Error !');
+    }
+  };
+
+  const handleVerify = async (e) => {
+    e.preventDefault();
+    try 
+    {
+      const response = await axios.post("http://localhost:3000/send-otp", { number: form.phone });
+      setMsg(response.data); 
+      setOtpBox(true);
+    } 
+    catch (error) 
+    {
+      setMsg('Error in sending OTP. Please try again !');
+    }
+  };  
+
   return (
     <div>
       <div className='fixed top-0 left-0 bg-transparent p-2'>
         <Link to="/">
           <button className="bg-[#347928] p-2 text-white rounded-lg hover:scale-110 active:scale-95 transition-all duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" class="size-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
             </svg>
           </button>
@@ -40,23 +80,45 @@ const SignUp = () => {
               <p className="bg-[#347928] rounded-t-xl text-white p-3 text-center font-bold text-2xl md:text-3xl shadow-lg shadow-black">
                 Sign Up
               </p>
+
               <div className="my-3 p-2">
                 <div className="my-4">
                   <label className={lableStyle}>Your Phone Number</label><br />
-                  <input type="text" name="phone" value={form.phone} onChange={handleChange} className={inputBoxStyle} />
+                  <input type="text" name="phone" value={form.phone} onChange={handleChange} className={inputBoxStyle} /><br />
+                  {otpBox && (
+                    <div>
+                      <input type="text" className={inputBoxStyle} placeholder='Enter your OTP here' value={otp} onChange={handleOtpChange}/><br />
+                      <button className='rounded-lg bg-[#347928] hover:scale-110 active:scale-95 p-1 text-md md:text-xl text-white transition-all duration-300 mt-3' onClick={handleOtpSubmit}>
+                        Submit OTP
+                      </button>
+                    </div>
+                  )}
+                  {(!otpBox) && (
+                    <button className='rounded-lg bg-[#347928] hover:scale-110 active:scale-95 p-1 text-md md:text-xl text-white transition-all duration-300 mt-3' onClick={handleVerify}>
+                      Verify
+                    </button>
+                  )}
                 </div>
+
                 <div className="my-4">
-                  <label className={lableStyle}>Your Password</label><br />
+                  <label className={lableStyle}>Set Your Password</label><br />
                   <input type="password" name="pwd" value={form.pwd} onChange={handleChange} className={inputBoxStyle} />
                 </div>
+
                 <div className="my-4">
                   <label className={lableStyle}>Confirm Your Password</label><br />
                   <input type="password" name="cpwd" value={form.cpwd} onChange={handleChange} className={inputBoxStyle} />
                 </div>
               </div>
+
+              <div className='my-2 text-md text-red-600 font-semibold'>
+                {msg}
+              </div>
+
               <button className="rounded-lg bg-[#347928] hover:scale-110 active:scale-95 p-2 text-lg md:text-xl text-white transition-all duration-300 mb-2" onClick={handleSubmit}>
                 Sign Up
               </button>
+
               <div className='mb-4'>
                   <p className="text-sm">Already have an account? Then</p>
                   <Link to="/signin" className="text-black hover:underline text-lg font-bold">Sign In</Link>
