@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import VegeInfo from '../components/VegeInfo';
 import axios from 'axios';
+import { isStrong } from '../utilities/Passwords';
 
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -32,20 +33,32 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(form.phone==="")
+      setMsg("Enter your phone number");
+    else if(form.pwd==="")
+      setMsg("Enter a password for your account");
+    else if(form.cpwd==="")
+      setMsg("Confirm your password by retyping");
+    else if(form.pwd!==form.cpwd)
+      setMsg("Confirm your password as it is mismatching");
+    else if(!isStrong(form.pwd))
+      setMsg("Enter a strong password");
+    else
+      setMsg(JSON.stringify(form))
   };
 
   const handleOtpSubmit = async(e) => {
     e.preventDefault();
-    try 
+    try
     {
-      const response = await axios.post("http://localhost:3000/verify-otp", {otp});
+      const response = await axios.post("http://localhost:3000/verify-otp", { number: form.phone, otp });
       setMsg(response.data); 
     } 
     catch (error) 
     {
       setMsg('Error !');
     }
-  };
+  };  
 
   const handleVerify = async (e) => {
     e.preventDefault();
@@ -84,10 +97,10 @@ const SignUp = () => {
               <div className="my-3 p-2">
                 <div className="my-4">
                   <label className={lableStyle}>Your Phone Number</label><br />
-                  <input type="text" name="phone" value={form.phone} onChange={handleChange} className={inputBoxStyle} /><br />
+                  <input type="text" name="phone" value={form.phone} onChange={handleChange} className={inputBoxStyle} required/><br />
                   {otpBox && (
                     <div>
-                      <input type="text" className={inputBoxStyle} placeholder='Enter your OTP here' value={otp} onChange={handleOtpChange}/><br />
+                      <input type="text" className={inputBoxStyle} placeholder='Enter your OTP here' value={otp} onChange={handleOtpChange} required/><br />
                       <button className='rounded-lg bg-[#347928] hover:scale-110 active:scale-95 p-1 text-md md:text-xl text-white transition-all duration-300 mt-3' onClick={handleOtpSubmit}>
                         Submit OTP
                       </button>
@@ -102,12 +115,12 @@ const SignUp = () => {
 
                 <div className="my-4">
                   <label className={lableStyle}>Set Your Password</label><br />
-                  <input type="password" name="pwd" value={form.pwd} onChange={handleChange} className={inputBoxStyle} />
+                  <input type="password" name="pwd" value={form.pwd} onChange={handleChange} className={inputBoxStyle} required/>
                 </div>
 
                 <div className="my-4">
                   <label className={lableStyle}>Confirm Your Password</label><br />
-                  <input type="password" name="cpwd" value={form.cpwd} onChange={handleChange} className={inputBoxStyle} />
+                  <input type="password" name="cpwd" value={form.cpwd} onChange={handleChange} className={inputBoxStyle} required/>
                 </div>
               </div>
 

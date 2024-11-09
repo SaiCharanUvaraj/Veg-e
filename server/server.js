@@ -25,8 +25,8 @@ app.post('/send-otp', (req, res) => {
 });
 
 app.post('/verify-otp', (req, res) => {
-    const {otp}=req.body;
-    res.send(`Otp ${otp} was received by the server`).status(200);
+    const {number,otp}=req.body;
+    res.send(`The entered otp ${otp} for the ${number} was received by the server`).status(200);
 });
 
 app.listen(PORT, () => {
