@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import VegeInfo from '../components/VegeInfo';
 import axios from 'axios';
 import { isStrong } from '../utilities/Passwords';
+import { useNavigate } from 'react-router-dom';
+import ClipLoader from "react-spinners/ClipLoader";
 
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -13,15 +15,17 @@ const SignUp = () => {
   const [msg,setMsg]=useState("");
   const [otp,setOtp]=useState("");
   const [otpBox,setOtpBox]=useState(false);
+  const [verified,setVerified]=useState(false);
+  const navigate=useNavigate();
 
-  const inputBoxStyle = "rounded-lg mt-2 w-5/6 focus:scale-105 text-lg h-10 transition-all duration-300";
+  const inputBoxStyle = "rounded-lg mt-2 w-5/6 focus:scale-105 text-lg h-10 transition-all duration-300 text-center p-2";
   const lableStyle = "text-lg font-semibold";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     if(value=="")
       setForm({ ...form, [name]: value });
-    if(name=="phone" && !(/^[0-9]+$/.test(value)))
+    if(name==="phone" && !(/^[0-9]+$/.test(value)) || (name==="phone" && value.length===11))
       return
     setForm({ ...form, [name]: value });
   };
@@ -31,20 +35,27 @@ const SignUp = () => {
     setOtp(otp);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if(form.phone==="")
       setMsg("Enter your phone number");
+    else if(verified===false)
+      setMsg("Verify your number through OTP");
     else if(form.pwd==="")
       setMsg("Enter a password for your account");
+    else if(!isStrong(form.pwd))
+      setMsg("Enter a strong password");
     else if(form.cpwd==="")
       setMsg("Confirm your password by retyping");
     else if(form.pwd!==form.cpwd)
       setMsg("Confirm your password as it is mismatching");
-    else if(!isStrong(form.pwd))
-      setMsg("Enter a strong password");
     else
-      setMsg(JSON.stringify(form))
+    {
+      const response= await axios.post("http://localhost:3000/register-user",{phone:form.phone,pwd:form.pwd});
+      setMsg(response.data.message);
+      if(response.data.success===true)
+          setTimeout(()=>navigate('/signin'),1500);
+    }
   };
 
   const handleOtpSubmit = async(e) => {
@@ -52,25 +63,40 @@ const SignUp = () => {
     try
     {
       const response = await axios.post("http://localhost:3000/verify-otp", { number: form.phone, otp });
-      setMsg(response.data); 
-    } 
+      setMsg(response.data.message); 
+      if(response.data.success===true)
+        setVerified(true);
+      setOtpBox(false);
+    }   
     catch (error) 
     {
-      setMsg('Error !');
+      setMsg('Error in connecting to server !');
     }
   };  
 
   const handleVerify = async (e) => {
     e.preventDefault();
-    try 
+    if(form.phone==="")
+      setMsg("Enter your phone number");
+    else if(form.phone.length!=10)
+      setMsg("Invalid phone number");
+    else
     {
-      const response = await axios.post("http://localhost:3000/send-otp", { number: form.phone });
-      setMsg(response.data); 
-      setOtpBox(true);
-    } 
-    catch (error) 
-    {
-      setMsg('Error in sending OTP. Please try again !');
+      try 
+      {
+        const response = await axios.post("http://localhost:3000/send-otp", { number: form.phone });
+        if(response.data===false)
+          setMsg("The Phone number is already registered !"); 
+        else
+        {
+          setMsg(response.data); 
+          setOtpBox(true);
+        }
+      } 
+      catch (error) 
+      {
+        setMsg('Error in sending OTP. Please try again !');
+      }
     }
   };  
 
@@ -87,7 +113,8 @@ const SignUp = () => {
       </div>
       <div className="grid md:grid-cols-2 grid-cols-1 h-screen gap-5">
         <VegeInfo />
-        <div className="bg-[#C0EBA6] flex justify-center items-center py-10 px-2">
+        <div className="bg-[#C0EBA6] flex flex-col justify-center items-center py-10 px-2">
+          <p className='nerko-one-regular text-5xl text-[#347928] font-bold text-center pb-10'> Create your new Account here</p>
           <form className="bg-[#FCCD2A] rounded-xl sm:w-4/5 w-full">
             <center>
               <p className="bg-[#347928] rounded-t-xl text-white p-3 text-center font-bold text-2xl md:text-3xl shadow-lg shadow-black">
@@ -106,10 +133,13 @@ const SignUp = () => {
                       </button>
                     </div>
                   )}
-                  {(!otpBox) && (
+                  {(!otpBox && !verified) && (
                     <button className='rounded-lg bg-[#347928] hover:scale-110 active:scale-95 p-1 text-md md:text-xl text-white transition-all duration-300 mt-3' onClick={handleVerify}>
                       Verify
                     </button>
+                  )}
+                  {(!otpBox && verified) && (
+                    <p className="text-[#347928] bg-transparent p-1 text-center font-bold text-lg"> Phone number Verified </p>
                   )}
                 </div>
 
@@ -124,7 +154,7 @@ const SignUp = () => {
                 </div>
               </div>
 
-              <div className='my-2 text-md text-red-600 font-semibold'>
+              <div className='my-2 text-lg text-red-600 font-bold'>
                 {msg}
               </div>
 

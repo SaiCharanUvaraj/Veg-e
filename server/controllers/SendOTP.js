@@ -1,10 +1,8 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 
-const sendSMS = (number)=>{
+const sendOtp = (number,otp)=>{
     dotenv.config();
-    const otp = Math.floor(Math.random() * (10000 - 1000)) + 1000;
-
     const API_KEY = process.env.FAST2SMS_API_KEY;
     const numbers = number;
     const variables_values = String(otp);
@@ -34,4 +32,4 @@ const sendSMS = (number)=>{
     };
     otpRequest();
 }
-export default sendSMS;
+export default sendOtp;

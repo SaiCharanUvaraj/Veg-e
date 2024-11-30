@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import VegeInfo from '../components/VegeInfo';
+import axios from 'axios';
 
 const SignIn = () => {
   const [form, setForm] = useState({
     phone: "",
     pwd: ""
   });
+  const [msg,setMsg]=useState("");
 
-  const inputBoxStyle = "rounded-lg mt-2 w-5/6 focus:scale-105 text-lg h-10 transition-all duration-300";
+  const inputBoxStyle = "rounded-lg mt-2 w-5/6 focus:scale-105 text-lg h-10 transition-all duration-300 text-center p-2";
   const lableStyle = "text-lg font-semibold";
 
   const handleChange = (e) => {
@@ -16,8 +18,15 @@ const SignIn = () => {
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    if(form.phone==="" || form.pwd==="")
+    {
+      setMsg("Enter your registered phone number and password.");
+      return
+    }
+    const response=await axios.post("http://localhost:3000/auth-user",{phone:form.phone, pwd:form.pwd});
+    setMsg(response.data.message);
   };
 
   return (
@@ -33,7 +42,8 @@ const SignIn = () => {
       </div>
       <div className="grid md:grid-cols-2 grid-cols-1 h-screen gap-5">
         <VegeInfo />
-        <div className="bg-[#C0EBA6] flex justify-center items-center py-10 px-2">
+        <div className="bg-[#C0EBA6] flex flex-col justify-center items-center py-10 px-2">
+          <p className='nerko-one-regular text-5xl text-[#347928] font-bold text-center pb-10'> Get into your Account here</p>
           <form className="bg-[#FCCD2A] rounded-xl sm:w-4/5 w-full">
             <center>
               <p className="bg-[#347928] rounded-t-xl text-white p-3 text-center font-bold text-2xl md:text-3xl shadow-lg shadow-black">
@@ -48,6 +58,9 @@ const SignIn = () => {
                   <label className={lableStyle}>Your Password</label><br />
                   <input type="password" name="pwd" value={form.pwd} onChange={handleChange} className={inputBoxStyle} />
                 </div>
+              </div>
+              <div className='my-2 text-lg text-red-600 font-bold'>
+                {msg}
               </div>
               <button className="rounded-lg bg-[#347928] hover:scale-110 active:scale-95 p-2 text-lg md:text-xl text-white transition-all duration-300 mb-2" onClick={handleSubmit}>
                 Sign In
