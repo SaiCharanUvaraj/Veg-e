@@ -6,16 +6,13 @@ const verifyOtp=async(phone,otp)=>{
         if (!record)
             return { success: false, message: 'OTP not found or expired' };
         if (record.otp === otp)
-        {
-            console.log("OTP verified successfully!");
-            return { success: true, message: 'OTP verified successfully!' };
-        }
+            return { success: true, message: 'OTP verified successfully!' }
         else
             return { success: false, message: 'Invalid OTP' };
     } 
     catch (error) 
     {
-        console.error('Error in verifying OTP:', error);
+        console.error('Error in verifying OTP: ', error);
         return { success: false, message: 'Internal server error' };
     }
 }

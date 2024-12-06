@@ -2,6 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import mongoose from "mongoose";
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import sendOTP from './controllers/SendOtp.js'
 import saveOtp from './controllers/SaveOtp.js';
@@ -16,17 +18,24 @@ import saveForgotOtp from './controllers/saveForgotOtp.js';
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
+const MONGO_URI=process.env.MONGO_URI;
 
 app.use(express.json());
 app.use(cors({
     origin: 'http://localhost:5173',
 }));
 
+/*
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const buildPath = path.join(__dirname, '../client/dist');
+app.use(express.static(buildPath));
+*/
+
 const connectDB = async () => {
     try 
     {
-      await mongoose.connect('mongodb://localhost:27017/vege');
-      console.log('Connected to MongoDB');
+      await mongoose.connect(MONGO_URI);
     } 
     catch (err) 
     {
@@ -39,6 +48,12 @@ app.get('/', (req, res) => {
     res.send('Server is running');
 });
 
+/*
+app.get('*', (req, res) => {
+    res.sendFile(path.join(buildPath, 'index.html'));
+  });
+*/
+
 app.post('/send-otp', async(req, res) => {
     const {number}=req.body;
     const response=await checkUser(number);
@@ -48,7 +63,7 @@ app.post('/send-otp', async(req, res) => {
         return;
     }
     const otp = Math.floor(Math.random() * (10000 - 1000)) + 1000;
-    //sendOTP(number,otp);
+    sendOTP(number,otp);
     saveOtp(number,otp);
     res.send("OTP was sent to your number").status(200);
 });
@@ -62,7 +77,7 @@ app.post('/forgot-password', async(req, res) => {
         return;
     }
     const otp = Math.floor(Math.random() * (10000 - 1000)) + 1000;
-    //sendOTP(number,otp);
+    sendOTP(number,otp);
     saveForgotOtp(number,otp);
     res.send("OTP was sent to your number").status(200);
 });

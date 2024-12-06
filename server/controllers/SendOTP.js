@@ -27,7 +27,7 @@ const sendOtp = (number,otp)=>{
     } 
     catch (error) 
     {
-        console.error("Detailed error:", error.message || error);
+        console.error("Error in sending OTP: ", error.message || error);
     }
     };
     otpRequest();

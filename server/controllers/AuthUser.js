@@ -1,18 +1,19 @@
 import userRegModel from "../models/UserRegSchema.js";
 
 const authUser = async (phone, pwd) => {
-    try {  
+    try 
+    {  
         const record = await userRegModel.findOne({ phone });
-        if (!record) {
+        if (!record)
             return { success: false, message: 'The phone number is not registered.' };
-        }
-        if (record.password === pwd) {
+        if (record.password === pwd)
             return { success: true, message: 'Signing in to your account...' };
-        } else {
+        else
             return { success: false, message: 'The password is incorrect.' };
-        }
-    } catch (error) {
-        console.error('Error in authenticating', error);
+    } 
+    catch (error) 
+    {
+        console.error('Error in authenticating user: ', error);
         return { success: false, message: 'Internal server error' };
     }
 };

@@ -10,7 +10,7 @@ const checkUser=async(phone)=>{
     } 
     catch (error) 
     {
-        console.error('Error in checking for phone number existence', error);
+        console.error('Error in checking for phone number existence: ', error);
     }
 }
 export default checkUser;

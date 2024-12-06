@@ -11,7 +11,7 @@ const saveOtp = async(phone,otp)=>{
     }
     catch (error)
     {
-      console.error('Error in saving OTP', error);
+      console.error('Error in saving OTP: ', error);
     }
 };
 

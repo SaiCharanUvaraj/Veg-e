@@ -44,9 +44,13 @@ const SignIn = () => {
     else
     {
       const response = await axios.post("http://localhost:3000/verify-forgot-otp", { number: form.phone, otp });
-      setMsg(`${response.data.message} Signing into your account...`);
       if(response.data.success===true)
+      {
         setTimeout(()=>navigate('/home'),1500);
+        setMsg(`${response.data.message} Signing into your account...`);
+      }
+      else  
+        setMsg(response.data.message);
       setOtp("");
     }
   };
