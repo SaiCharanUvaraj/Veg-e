@@ -8,11 +8,10 @@ const saveOtp = async(phone,otp)=>{
         {otp},
         {new:true,upsert: true}
       )
-      console.log("Otp Saved")
     }
     catch (error)
     {
-      console.error('Error saving OTP:', error);
+      console.error('Error in saving OTP', error);
     }
 };
 

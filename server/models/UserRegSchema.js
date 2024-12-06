@@ -9,6 +9,9 @@ const userRegSchema=new mongoose.Schema({
         type: String,
         required: true
     },
+    forgotOtp: {type:String,
+        default:""
+    },
     createdAt: { type: Date, default: Date.now }
 })
 const userRegModel=mongoose.model("User Credential",userRegSchema);

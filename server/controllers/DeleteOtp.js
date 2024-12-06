@@ -8,7 +8,7 @@ const deleteOtp = async(phone)=>{
     }
     catch (error)
     {
-      console.error('Error in deleting OTP:', error);
+      console.error('Error in deleting OTP', error);
     }
 };
 

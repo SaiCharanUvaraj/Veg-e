@@ -54,7 +54,7 @@ const SignUp = () => {
       const response= await axios.post("http://localhost:3000/register-user",{phone:form.phone,pwd:form.pwd});
       setMsg(response.data.message);
       if(response.data.success===true)
-          setTimeout(()=>navigate('/signin'),1500);
+          setTimeout(()=>navigate('/signin'),2000);
     }
   };
 
@@ -66,6 +66,8 @@ const SignUp = () => {
       setMsg(response.data.message); 
       if(response.data.success===true)
         setVerified(true);
+      else  
+        setOtp("");
       setOtpBox(false);
     }   
     catch (error) 
@@ -102,17 +104,17 @@ const SignUp = () => {
 
   return (
     <div>
-      <div className='fixed top-0 left-0 bg-transparent p-2'>
-        <Link to="/">
-          <button className="bg-[#347928] p-2 text-white rounded-lg hover:scale-110 active:scale-95 transition-all duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
-            </svg>
-          </button>
-        </Link>
-      </div>
       <div className="grid md:grid-cols-2 grid-cols-1 h-screen gap-5">
-        <VegeInfo />
+        <div className='grid place-items-center'>
+          <VegeInfo />
+          <Link to="/">
+            <button className="bg-[#347928] p-2 text-white rounded-lg hover:scale-110 active:scale-95 transition-all duration-300">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+              </svg>
+            </button>
+          </Link>
+        </div>
         <div className="bg-[#C0EBA6] flex flex-col justify-center items-center py-10 px-2">
           <p className='nerko-one-regular text-5xl text-[#347928] font-bold text-center pb-10'> Create your new Account here</p>
           <form className="bg-[#FCCD2A] rounded-xl sm:w-4/5 w-full">
@@ -134,9 +136,10 @@ const SignUp = () => {
                     </div>
                   )}
                   {(!otpBox && !verified) && (
-                    <button className='rounded-lg bg-[#347928] hover:scale-110 active:scale-95 p-1 text-md md:text-xl text-white transition-all duration-300 mt-3' onClick={handleVerify}>
+                    <Link className='text-black hover:underline text-lg font-bold' onClick={handleVerify}>
                       Verify
-                    </button>
+                      <br />
+                    </Link>
                   )}
                   {(!otpBox && verified) && (
                     <p className="text-[#347928] bg-transparent p-1 text-center font-bold text-lg"> Phone number Verified </p>

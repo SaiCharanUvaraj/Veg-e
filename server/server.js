@@ -10,6 +10,8 @@ import registerUser from './controllers/RegisterUser.js';
 import checkUser from './controllers/CheckUser.js';
 import deleteOtp from './controllers/DeleteOtp.js';
 import authUser from './controllers/AuthUser.js';
+import verifyForgotOtp from './controllers/VerifyForgotOtp.js';
+import saveForgotOtp from './controllers/saveForgotOtp.js';
 
 dotenv.config();
 const app = express();
@@ -40,15 +42,35 @@ app.get('/', (req, res) => {
 app.post('/send-otp', async(req, res) => {
     const {number}=req.body;
     const response=await checkUser(number);
+    if(response===true)
+    {
+        res.send(false).status(200);
+        return;
+    }
+    const otp = Math.floor(Math.random() * (10000 - 1000)) + 1000;
+    //sendOTP(number,otp);
+    saveOtp(number,otp);
+    res.send("OTP was sent to your number").status(200);
+});
+
+app.post('/forgot-password', async(req, res) => {
+    const {number}=req.body;
+    const response=await checkUser(number);
     if(response===false)
     {
         res.send(false).status(200);
         return;
     }
     const otp = Math.floor(Math.random() * (10000 - 1000)) + 1000;
-    sendOTP(number,otp);
-    saveOtp(number,otp);
+    //sendOTP(number,otp);
+    saveForgotOtp(number,otp);
     res.send("OTP was sent to your number").status(200);
+});
+
+app.post('/verify-forgot-otp', async(req, res) => {
+    const {number,otp}=req.body;
+    const response=await verifyForgotOtp(number,otp);
+    res.status(200).json(response);
 });
 
 app.post('/verify-otp', async(req, res) => {

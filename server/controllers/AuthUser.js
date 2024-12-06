@@ -12,7 +12,7 @@ const authUser = async (phone, pwd) => {
             return { success: false, message: 'The password is incorrect.' };
         }
     } catch (error) {
-        console.error('Error in authenticating:', error);
+        console.error('Error in authenticating', error);
         return { success: false, message: 'Internal server error' };
     }
 };

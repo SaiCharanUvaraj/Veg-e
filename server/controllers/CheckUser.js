@@ -3,15 +3,14 @@ const checkUser=async(phone)=>{
     try
     {
         const record=await userRegModel.findOne({phone});
-        console.log(record)
         if (!record)
-            return true;
-        else
             return false;
+        else
+            return true;
     } 
     catch (error) 
     {
-        console.error('Error in checking for phone number', error);
+        console.error('Error in checking for phone number existence', error);
     }
 }
 export default checkUser;
